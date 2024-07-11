@@ -4,7 +4,6 @@ class Node {
 public:
     int data;
     Node* next;
-
     Node(int value) : data(value), next(nullptr) {}
 };
 
@@ -85,6 +84,20 @@ public:
             tail = newNode;
         }
     }
+    void reverse() {
+    Node* prev = nullptr;
+    Node* current = head;
+    Node* next = nullptr;
+    tail = head; // Update tail to point to the original head
+
+    while (current != nullptr) {
+        next = current->next; // Store next node
+        current->next = prev; // Reverse current node's pointer
+        prev = current; // Move pointers one position ahead
+        current = next;
+    }
+    head = prev; // Update head to point to the new head (previous tail)
+    }
 };
 
 int main() {
@@ -101,11 +114,15 @@ int main() {
     q.insert(5, 0); // Insert 5 at position 0 (head)
     q.display();
 
+    q.reverse();
+    q.display();
+
     q.insert(35, 4); // Insert 35 at position 4 (end)
     q.display();
 
     q.insert(40, 10); // Attempt to insert at an out-of-bounds position
     q.display();
+   
 
     return 0;
 }
