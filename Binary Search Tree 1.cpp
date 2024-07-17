@@ -34,6 +34,22 @@ private:
         }
     }
 
+    void PreOrderTraversal(Node* node) {
+        if (node != nullptr) {
+            cout << node->data << " ";
+            inOrderTraversal(node->left);
+            inOrderTraversal(node->right);
+        }
+    }
+
+    void PostOrderTraversal(Node* node) {
+        if (node != nullptr) {
+            inOrderTraversal(node->left);
+            inOrderTraversal(node->right);
+            cout << node->data << " ";
+        }
+    }
+
     Node* searchtree(Node* root, int value) {
         if (root == nullptr) {
             cout << "Value " << value << " doesn't exist in Tree" << endl;
@@ -90,6 +106,14 @@ public:
         inOrderTraversal(root);
     }
 
+    void PreOrderTraversal() {
+        PreOrderTraversal(root);
+    }
+
+    void PostOrderTraversal() {
+        PostOrderTraversal(root);
+    }
+
     void searchtree(int value) {
         searchtree(root, value);
     }
@@ -143,10 +167,7 @@ int main() {
     B.insertNode(8);
     B.insertNode(12);
     B.insertNode(17);
-    B.insertNode(25);
-    B.insertNode(90);
-    B.insertNode(6);
-    B.insertNode(57);
+    B.insertNode(25); 
 
     B.findmin();
     B.findmin2();
@@ -157,6 +178,12 @@ int main() {
 
     cout << "In-order traversal of the BST: ";
     B.inOrderTraversal();
+    cout<<endl;
+    cout << "Pre-order traversal of the BST: ";
+    B.PreOrderTraversal();
+    cout<<endl;
+    cout << "Post-order traversal of the BST: ";
+    B.PostOrderTraversal();
     cout << endl;
     int data;
 
