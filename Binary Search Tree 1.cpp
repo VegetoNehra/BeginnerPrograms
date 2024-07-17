@@ -115,6 +115,37 @@ private:
         }
         return max(findHeight(root->left), findHeight(root->right)) + 1;
     }
+
+
+    Node* deleteNode(Node* root , int data){
+        if(root==nullptr){
+            return root;
+        }
+        else if(root->data < data){
+            root->right=deleteNode(root->right ,data);
+        }
+        else if(root->data>data){
+            root->left=deleteNode(root->left ,data);
+        }else {
+            if (root->left == nullptr && root->right == nullptr) {
+                delete root;
+                root = nullptr;
+            } else if (root->left == nullptr) {
+                Node* temp = root;
+                root = root->right;
+                delete temp;
+            } else if (root->right == nullptr) {
+                Node* temp = root;
+                root = root->left;
+                delete temp;
+            } else {
+                Node* temp = findMin(root->right);
+                root->data = temp->data;
+                root->right = deleteNode(root->right, temp->data);
+            }
+        }
+        return root;
+    }
     
 public:
     BinarySearchTree() : root(nullptr) {}
@@ -178,6 +209,10 @@ public:
             cerr << "Height of Tree is : " << height << endl;
         }
     }
+
+    void deleteNode(int value) {
+        root = deleteNode(root, value);
+    }
 };
 
 int main() {
@@ -206,6 +241,12 @@ int main() {
     cout << "Post-order traversal of the BST: ";
     bst.postOrderTraversal();
     cout << endl;
+
+    cout << "Level-order traversal of the BST: ";
+    bst.levelOrderTraversal();
+    cout << endl;
+
+    bst.deleteNode(20);
 
     cout << "Level-order traversal of the BST: ";
     bst.levelOrderTraversal();
