@@ -1,4 +1,5 @@
 #include <iostream>
+#include <queue>
 using namespace std;
 
 class Node {
@@ -34,66 +35,86 @@ private:
         }
     }
 
-    void PreOrderTraversal(Node* node) {
+    void preOrderTraversal(Node* node) {
         if (node != nullptr) {
             cout << node->data << " ";
-            inOrderTraversal(node->left);
-            inOrderTraversal(node->right);
+            preOrderTraversal(node->left);
+            preOrderTraversal(node->right);
         }
     }
 
-    void PostOrderTraversal(Node* node) {
+    void postOrderTraversal(Node* node) {
         if (node != nullptr) {
-            inOrderTraversal(node->left);
-            inOrderTraversal(node->right);
+            postOrderTraversal(node->left);
+            postOrderTraversal(node->right);
             cout << node->data << " ";
         }
     }
 
-    Node* searchtree(Node* root, int value) {
+    void levelOrderTraversal(Node* root) {
+        if (root == nullptr) {
+            return;
+        }
+
+        queue<Node*> q;
+        q.push(root);
+
+        while (!q.empty()) {
+            Node* current = q.front();
+            q.pop();
+            cout << current->data << " ";
+
+            if (current->left != nullptr) {
+                q.push(current->left);
+            }
+            if (current->right != nullptr) {
+                q.push(current->right);
+            }
+        }
+    }
+
+    Node* searchTree(Node* root, int value) {
         if (root == nullptr) {
             cout << "Value " << value << " doesn't exist in Tree" << endl;
             return nullptr;
         } else if (root->data == value) {
-            cout << "Value " << value << " entered is Tree's Root" << endl;
+            cout << "Value " << value << " is found in the Tree" << endl;
             return root;
         } else if (value < root->data) {
-            return searchtree(root->left, value);
+            return searchTree(root->left, value);
         } else {
-            return searchtree(root->right, value);
+            return searchTree(root->right, value);
         }
     }
-    Node* findmin(Node*root){ // using loops and itiration
-        Node* current=root;
-        while(current && current->left != nullptr){
-            current=current->left;
+
+    Node* findMin(Node* root) {
+        Node* current = root;
+        while (current && current->left != nullptr) {
+            current = current->left;
         }
         return current;
     }
 
-    Node* findmin2(Node*root){
-        if(root->left==nullptr){
+    Node* findMinRecursive(Node* root) {
+        if (root->left == nullptr) {
             return root;
         }
-        return findmin2(root->left);
-
+        return findMinRecursive(root->left);
     }
 
-    Node*findmax(Node*root){
-        if (root->right==nullptr){
+    Node* findMax(Node* root) {
+        if (root->right == nullptr) {
             return root;
         }
-        return findmax(root->right);
+        return findMax(root->right);
     }
 
-    int findheight(Node* root){
-        if (root==nullptr){
+    int findHeight(Node* root) {
+        if (root == nullptr) {
             return -1;
         }
-        return max(findheight(root->right),findheight(root->left)) +1;//+1 for the edge of root to next parent node
+        return max(findHeight(root->left), findHeight(root->right)) + 1;
     }
-        
-    
     
 public:
     BinarySearchTree() : root(nullptr) {}
@@ -106,92 +127,94 @@ public:
         inOrderTraversal(root);
     }
 
-    void PreOrderTraversal() {
-        PreOrderTraversal(root);
+    void preOrderTraversal() {
+        preOrderTraversal(root);
     }
 
-    void PostOrderTraversal() {
-        PostOrderTraversal(root);
+    void postOrderTraversal() {
+        postOrderTraversal(root);
     }
 
-    void searchtree(int value) {
-        searchtree(root, value);
+    void levelOrderTraversal() {
+        levelOrderTraversal(root);
     }
 
-    void findmin(){
-        if(root==nullptr){
-            cout<<"Error: Tree is Empty"<<endl;
-            }
-        else{
-            Node* MinNum= findmin(root);
-            cout<<"Smallest node value is "<< MinNum->data <<endl;            
+    void searchTree(int value) {
+        searchTree(root, value);
+    }
+
+    void findMin() {
+        if (root == nullptr) {
+            cout << "Error: Tree is Empty" << endl;
+        } else {
+            Node* minNode = findMin(root);
+            cout << "Smallest node value is " << minNode->data << endl;
         }
     }
 
-    void findmin2(){
-        if(root==nullptr){
-            cerr<<"Error Tree is empty"<<endl;
-        }
-        else{
-            Node*minnum=findmin2(root);
-            cerr<<"Smallest node using recursion is "<<minnum->data<<endl;
+    void findMinRecursive() {
+        if (root == nullptr) {
+            cerr << "Error: Tree is empty" << endl;
+        } else {
+            Node* minNode = findMinRecursive(root);
+            cerr << "Smallest node using recursion is " << minNode->data << endl;
         }
     }
     
-    void findmax(){
-        if(root==nullptr){
-            cout<<"Error: Tree is Empty"<<endl;
+    void findMax() {
+        if (root == nullptr) {
+            cout << "Error: Tree is Empty" << endl;
+        } else {
+            Node* maxNode = findMax(root);
+            cout << "Largest node value is " << maxNode->data << endl;
         }
-        else{
-            Node* Maxnum=findmax(root);
-            cout<<"Largest node using recursion is "<<Maxnum->data<<endl;
-        }
-        
     }
 
-    void findheight(){
-        if(root==nullptr){
-            cerr<<"Height of Tree is : -1"<<endl;
+    void findHeight() {
+        if (root == nullptr) {
+            cerr << "Height of Tree is : -1" << endl;
+        } else {
+            int height = findHeight(root);
+            cerr << "Height of Tree is : " << height << endl;
         }
-        int height=findheight(root);
-        cerr<<"Height of Tree is : "<<height<<endl;
     }
-    
 };
 
 int main() {
-    BinarySearchTree B;
-    B.insertNode(15);
-    B.insertNode(10);
-    B.insertNode(20);
-    B.insertNode(8);
-    B.insertNode(12);
-    B.insertNode(17);
-    B.insertNode(25); 
+    BinarySearchTree bst;
+    bst.insertNode(15);
+    bst.insertNode(10);
+    bst.insertNode(20);
+    bst.insertNode(8);
+    bst.insertNode(12);
+    bst.insertNode(17);
+    bst.insertNode(25); 
 
-    B.findmin();
-    B.findmin2();
-
-    B.findmax();
-
-    B.findheight();
+    bst.findMin();
+    bst.findMinRecursive();
+    bst.findMax();
+    bst.findHeight();
 
     cout << "In-order traversal of the BST: ";
-    B.inOrderTraversal();
-    cout<<endl;
-    cout << "Pre-order traversal of the BST: ";
-    B.PreOrderTraversal();
-    cout<<endl;
-    cout << "Post-order traversal of the BST: ";
-    B.PostOrderTraversal();
+    bst.inOrderTraversal();
     cout << endl;
+
+    cout << "Pre-order traversal of the BST: ";
+    bst.preOrderTraversal();
+    cout << endl;
+
+    cout << "Post-order traversal of the BST: ";
+    bst.postOrderTraversal();
+    cout << endl;
+
+    cout << "Level-order traversal of the BST: ";
+    bst.levelOrderTraversal();
+    cout << endl;
+
     int data;
-
-    cout<<"Enter number to be searched"<<endl;
-    cin>>data;
-
-    B.searchtree(data);
+    cout << "Enter number to be searched: ";
+    cin >> data;
+    bst.searchTree(data);
     
-
     return 0;
 }
