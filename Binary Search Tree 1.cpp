@@ -75,10 +75,8 @@ private:
 
     Node* searchTree(Node* root, int value) {
         if (root == nullptr) {
-            cout << "Value " << value << " doesn't exist in Tree" << endl;
             return nullptr;
         } else if (root->data == value) {
-            cout << "Value " << value << " is found in the Tree" << endl;
             return root;
         } else if (value < root->data) {
             return searchTree(root->left, value);
@@ -146,6 +144,30 @@ private:
         }
         return root;
     }
+
+    Node* getSuccessor(Node* root, int data){ // getting an in-order successor
+        Node* current=searchTree(root ,data);
+        if(current==nullptr){
+            return nullptr;
+        }
+        else if(current->right!=nullptr){ //Case:1 Right subtree present
+            return findMin(current->right);
+        }
+        else{
+            Node* successor =nullptr;
+            Node* ancestor= root;
+            while(ancestor!=current){
+                if(current->data < ancestor->data){
+                    successor=ancestor;
+                    ancestor=ancestor->left;
+                }
+                else{
+                    ancestor=ancestor->right;
+                }
+            }
+            return successor;
+        }
+    }
     
 public:
     BinarySearchTree() : root(nullptr) {}
@@ -170,8 +192,14 @@ public:
         levelOrderTraversal(root);
     }
 
-    void searchTree(int value) {
-        searchTree(root, value);
+    void search(int value) {
+        Node* ptr=searchTree(root, value);
+        if(ptr==nullptr){
+            cout<<"Value is not in Tree"<<endl;
+        }
+        else{
+            cout<<"Value : "<<ptr->data<<" is in Search Tree"<<endl;
+        }
     }
 
     void findMin() {
@@ -213,6 +241,15 @@ public:
     void deleteNode(int value) {
         root = deleteNode(root, value);
     }
+
+    void successor(int data){
+        Node* temp=getSuccessor(root,data);
+        if(temp==nullptr){
+            cout<<"No Successor to "<<data<<endl;
+        }else{
+            cout<<"In-Order Successor to "<<data <<" is "<< temp->data<<endl;
+            }
+    }
 };
 
 int main() {
@@ -233,6 +270,9 @@ int main() {
     cout << "In-order traversal of the BST: ";
     bst.inOrderTraversal();
     cout << endl;
+
+    bst.successor(20);
+    bst.successor(8);
 
     cout << "Pre-order traversal of the BST: ";
     bst.preOrderTraversal();
@@ -255,7 +295,7 @@ int main() {
     int data;
     cout << "Enter number to be searched: ";
     cin >> data;
-    bst.searchTree(data);
+    bst.search(data);
     
     return 0;
 }
