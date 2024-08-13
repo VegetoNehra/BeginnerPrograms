@@ -34,7 +34,7 @@ public:
 
     // Check if this node marks the end of a word
     bool isEnd() {
-        return  EW>0;// IF EW>0 returns bool value
+        return EW > 0;
     }
 
     // Increase prefix count
@@ -51,8 +51,8 @@ public:
     int getPrefixCount() {
         return cPre;
     }
-    
-    int getendswith(){
+
+    int getendswith() {
         return EW;
     }
 };
@@ -60,11 +60,13 @@ public:
 class Trie {
 private:
     Node* root;
+    int countNodes;
 
 public:
     // Initializing data structure
     Trie() {
         root = new Node();
+        countNodes = 1;
     }
 
     // Inserting a word into the Trie
@@ -73,6 +75,7 @@ public:
         for (int i = 0; i < word.size(); i++) {
             if (!node->containsKey(word[i])) {
                 node->put(word[i], new Node());
+                countNodes++;
             }
             node = node->get(word[i]);
             node->increasePrefix();
@@ -123,7 +126,7 @@ public:
         Node* node = root;
         for (int i = 0; i < prefix.size(); i++) {
             if (!node->containsKey(prefix[i])) {
-                return false;  // Prefix does not exist
+                return 0;  // Prefix does not exist
             }
             node = node->get(prefix[i]);
         }
@@ -145,7 +148,7 @@ public:
         }
     }
 
-
+    // Check if all prefixes of the word are complete in the Trie
     bool findCompleteString(string word) {
         Node* node = root;
         for (int i = 0; i < word.size(); i++) {
@@ -159,6 +162,35 @@ public:
         }
         return true;  // All prefixes are complete words
     }
+
+    // Count distinct substrings of a word using Trie
+    int countDistinctSubstrings1(string word) {
+        Trie tempTrie; // Temporary Trie to count distinct substrings
+        int cnt = 0;
+
+        for (int i = 0; i < word.size(); i++) {
+            Node* node = tempTrie.root; // Start from the temporary Trie root
+
+            for (int j = i; j < word.size(); j++) {
+                if (!node->containsKey(word[j])) {
+                    node->put(word[j], new Node());
+                    cnt++;
+                }
+                node = node->get(word[j]);
+            }
+        }
+        return cnt+1;
+    }
+
+    // Count distinct substrings of a word using Trie
+    //very in-efficient the time complexity is quadratic, should be avoided 
+    int countDistinctSubstrings2(string word) {
+    // Insert all suffixes of the word into the Trie
+    for (int i = 0; i < word.size(); i++) {
+        insert(word.substr(i));
+    }
+    return countNodes ;  // Adding 1 to count the empty substring
+}
 
 };
 
@@ -179,11 +211,13 @@ int main() {
     cout << trie.countWordsStartingWith("app") << endl; 
 
     cout << trie.search("app") << endl; 
-    trie.insert("apple"); 
 
     // Check for complete string
     cout << (trie.findCompleteString("apple") ? "Complete String" : "Not a Complete String") << endl; // returns Not a Complete String
     cout << (trie.findCompleteString("ap") ? "Complete String" : "Not a Complete String") << endl;  // returns Complete String
+
+    cout << trie.countDistinctSubstrings1("apple") << endl;
+    cout << trie.countDistinctSubstrings2("apple") << endl;
 
     return 0;
 }
