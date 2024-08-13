@@ -117,8 +117,6 @@ public:
             node = node->get(word[i]);
         }
         return node->getendswith();
-        //return node->isEnd() ? node->EW:0;  // Returns EW if isend true else 0 if isend false.
-        //?: This is the ternary conditional operator, which is a shorthand for an if-else statement.
     }
 
     // Count how many words start with a given prefix
