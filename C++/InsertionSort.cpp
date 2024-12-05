@@ -1,13 +1,21 @@
 #include <iostream>
 using namespace std;
 
-void insertionsort(int array[],int n){
-    for (int i=0;i<n;i++){
-        for(int j=0 ; j<=i;j++){
-            if (array[i]<array[j]){
-                swap(array[i],array[j]);
-            }
+void insertionsort(int array[], int n) {
+    for (int i = 1; i < n; i++) {   
+// Start from the second element
+        int key = array[i];  
+ /* The element to be inserted into the sorted portion*/
+        int j = i - 1;  /* Compare it with the sorted portion, starting from the rightmost element */
+        
+        /* Shift elements of the sorted portion that are greater than 'key' to the right*/
+        while (j >= 0 && array[j] > key) {
+            array[j + 1] = array[j];  // Shift element to the right
+            j--;  // Move to the next element
         }
+        
+        array[j + 1] = key; 
+ // Insert 'key' into its correct position
     }
 }
 
