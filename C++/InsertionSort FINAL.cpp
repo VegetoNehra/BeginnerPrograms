@@ -1,31 +1,37 @@
 #include <iostream>
+#include <vector>
 using namespace std;
 
-void insertionsort(int array[],int n){
-    for (int i=0;i<n;i++){
-        int j =i;
-        while(j>0 && array[j-1]>array[j]){
-            swap(array[j],array[j-1]);
-            j--;
+void insertionSort(vector<int>& arr) {
+    int n = arr.size();
+    for (int i = 1; i < n; i++) {
+        int key = arr[i];
+        int j = i - 1;
+
+        for (; j >= 0 && arr[j] > key; j--) {
+            arr[j + 1] = arr[j];
         }
+
+        arr[j + 1] = key;
     }
 }
 
+int main() {
+    vector<int> arr = {12, 11, 13, 5, 6};
 
-int main(){
-    int List[6]={8,9,5,9,2,5};
-    int size=6;
-    cout<<"Original Array is : ";
-    for(int i=0;i<size;i++){
-        cout<<List[i]<<" ";
+    cout << "Array before sorting: ";
+    for (int num : arr) {
+        cout << num << " ";
     }
-    cout<<endl;
-    insertionsort(List,size);
-    cout<<"Sorted Array is : ";
-    for(int i=0;i<size;i++){
-        cout<<List[i]<<" ";
+    cout << endl;
+
+    insertionSort(arr);
+
+    cout << "Array after sorting: ";
+    for (int num : arr) {
+        cout << num << " ";
     }
-    cout<<endl;
+    cout << endl;
+
     return 0;
-
 }
